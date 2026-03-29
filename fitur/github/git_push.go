@@ -10,6 +10,16 @@ import (
 
 func GitPush() {
 
+	savedToken := GetSavedToken()
+	if savedToken == "" {
+		fmt.Print("Masukan Token Github kamu :")
+		var inputToken string
+		fmt.Scanln(&inputToken)
+		SaveToken(inputToken)
+		savedToken = inputToken
+		fmt.Println("Token berhasil disimpan!")
+	}
+
 	cmd := exec.Command("git", "config", "--global", "user.email")
 	output, err := cmd.Output()
 	email := strings.TrimSpace(string(output))

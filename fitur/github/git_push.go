@@ -47,10 +47,19 @@ func GitPush() {
 		commitMassage = "Commit by bil cli"
 	}
 
+	var linkWithToken string
+	if strings.HasPrefix(linkRepo, "https://") {
+		// Kita potong "https://" dan ganti dengan "https://TOKEN@"
+		linkWithToken = "https://" + savedToken + "@" + strings.TrimPrefix(linkRepo, "https://")
+	} else {
+		// Kalau link-nya gak pake https:// (misal ngetik langsung github.com)
+		linkWithToken = "https://" + savedToken + "@" + linkRepo
+	}
+
 	exec.Command("git", "init").Run()
 	exec.Command("git", "add", ".").Run()
 	exec.Command("git", "commit", "-m", commitMassage).Run()
-	exec.Command("git", "remote", "add", "origin", linkRepo).Run()
+	exec.Command("git", "remote", "add", "origin", linkWithToken).Run()
 	exec.Command("git", "branch", "-M", "main").Run()
 
 	cmdPush := exec.Command("git", "push", "-u", "origin", "main")
